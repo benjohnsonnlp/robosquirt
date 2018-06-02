@@ -34,43 +34,24 @@ USE_L10N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 
-# DATABASES
-# ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#databases
-
-DATABASES = {
-    'default': env.db('DATABASE_URL', default='postgres:///moistmaster'),
-}
-DATABASES['default']['ATOMIC_REQUESTS'] = True
-
 # URLS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'moistmaster.urls'
 # https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = 'moistmaster.wsgi.application'
 
 # APPS
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django.contrib.humanize', # Handy template tags
-    'django.contrib.admin',
+    'django.contrib.humanize',
 ]
 THIRD_PARTY_APPS = [
-    'crispy_forms',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
     'rest_framework',
 ]
 LOCAL_APPS = [
-    'moistmaster.users.apps.UsersConfig',
+
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -88,10 +69,7 @@ MIGRATION_MODULES = {
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
 ]
-# https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
-AUTH_USER_MODEL = 'users.User'
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
 LOGIN_REDIRECT_URL = 'users:redirect'
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
@@ -132,8 +110,6 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -221,19 +197,6 @@ ADMINS = [
 MANAGERS = ADMINS
 
 
-# django-allauth
-# ------------------------------------------------------------------------------
-ACCOUNT_ALLOW_REGISTRATION = env.bool('DJANGO_ACCOUNT_ALLOW_REGISTRATION', True)
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_REQUIRED = True
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_ADAPTER = 'moistmaster.users.adapters.AccountAdapter'
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-SOCIALACCOUNT_ADAPTER = 'moistmaster.users.adapters.SocialAccountAdapter'
 
 # django-compressor
 # ------------------------------------------------------------------------------
@@ -242,3 +205,10 @@ INSTALLED_APPS += ['compressor']
 STATICFILES_FINDERS += ['compressor.finders.CompressorFinder']
 # Your stuff...
 # ------------------------------------------------------------------------------
+SECRET_KEY = env('DJANGO_SECRET_KEY', default='Q7Nnmm0lBJ7F6JLTPk6vpHJ2eciARLPSNqFGXBpHe7uk8dDoFowcoF9wZwOJJqPY')
+ALLOWED_HOSTS = [
+    "localhost",
+    "0.0.0.0",
+    "127.0.0.1",
+]
+DEBUG = True
