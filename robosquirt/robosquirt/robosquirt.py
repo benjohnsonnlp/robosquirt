@@ -3,7 +3,7 @@ import time
 import wiringpi
 
 
-GPIO_PIN = 14
+GPIO_PIN = 18
 
 # use 'GPIO naming'
 wiringpi.wiringPiSetupGpio()
