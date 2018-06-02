@@ -6,7 +6,7 @@ import wiringpi
 wiringpi.wiringPiSetupGpio()
 
 # set #18 to be a PWM output
-wiringpi.pinMode(18, wiringpi.GPIO.PWM_OUTPUT)
+wiringpi.pinMode(14, wiringpi.GPIO.PWM_OUTPUT)
 
 # set the PWM mode to milliseconds stype
 wiringpi.pwmSetMode(wiringpi.GPIO.PWM_MODE_MS)
