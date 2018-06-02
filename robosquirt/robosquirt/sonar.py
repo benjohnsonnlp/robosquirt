@@ -18,17 +18,20 @@ def make_do():
     logging.info("Waiting For Sensor To Settle")
     time.sleep(2)
 
+    # Send pulse signal for 10 µsec
     GPIO.output(TRIG, True)
     time.sleep(0.00001)
     GPIO.output(TRIG, False)
 
-    pulse_start, pulse_end = 0, 0
+    logging.info("Listen...")
+    # Listen for return signal.
     while GPIO.input(ECHO) == 0:
         pulse_start = time.time()
 
     while GPIO.input(ECHO) == 1:
         pulse_end = time.time()
 
+    logging.info("Calculating distance")
     pulse_duration = pulse_end - pulse_start
 
     distance = pulse_duration * 17150
