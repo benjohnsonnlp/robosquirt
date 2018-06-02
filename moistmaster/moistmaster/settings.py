@@ -4,8 +4,8 @@ Base settings to build other settings files upon.
 
 import environ
 
-ROOT_DIR = environ.Path(__file__) - 3  # (moistmaster/config/settings/base.py - 3 = moistmaster/)
-APPS_DIR = ROOT_DIR.path('moistmaster')
+ROOT_DIR = environ.Path(__file__) - 3  # Django project root
+APPS_DIR = ROOT_DIR.path('moistmaster') # Moistmaster dir
 
 env = environ.Env()
 
@@ -121,7 +121,7 @@ STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [
-    str(APPS_DIR.path('static')),
+    str(APPS_DIR + "moistmaster" + "static"),
 ]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
@@ -141,37 +141,25 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/dev/ref/settings/#templates
 TEMPLATES = [
     {
-        # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
-        'DIRS': [
-            str(APPS_DIR.path('templates')),
-        ],
+        'DIRS': [str(APPS_DIR + "moistmaster" + "templates")],
         'OPTIONS': {
-            # https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
             'debug': DEBUG,
-            # https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
-            # https://docs.djangoproject.com/en/dev/ref/templates/api/#loader-types
             'loaders': [
                 'django.template.loaders.filesystem.Loader',
                 'django.template.loaders.app_directories.Loader',
             ],
-            # https://docs.djangoproject.com/en/dev/ref/settings/#template-context-processors
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.i18n',
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
-                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
-# http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # FIXTURES
 # ------------------------------------------------------------------------------

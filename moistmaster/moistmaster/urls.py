@@ -2,8 +2,10 @@ from django.conf import settings
 from django.urls import include, path
 from django.views import defaults as default_views
 
-urlpatterns = [
+from .views import Index
 
+urlpatterns = [
+    path("", Index.as_view(), name="index"),
 ]
 
 if settings.DEBUG:
