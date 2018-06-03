@@ -89,6 +89,12 @@ class Valve:
         self.close()
 
     def handle_message(self, message):
+        """
+        Handle a message from a client of the Robosquirt server requesting some action be taken.
+
+        :param message: A message from a client of the Robosquirt server. This will have already been validated.
+        :return: A tuple of ``(<bool: did actione succeed?>, and <None> or <Str: error if it failed>)``
+        """
         if message["identifier"] != self.identifier:
             return False, "This message is for the wrong valve."
         action = message["action"]
