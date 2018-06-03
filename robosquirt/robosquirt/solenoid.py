@@ -29,6 +29,9 @@ class Valve:
 
     @property
     def real_status(self):
+        """
+        Actually poll the GPIO input for the state.
+        """
         return "open" if self.pin.current_state == ON else "close"
 
     def open(self):
