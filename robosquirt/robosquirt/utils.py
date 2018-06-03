@@ -1,7 +1,10 @@
 from contextlib import contextmanager
 from functools import partial
 import logging
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    GPIO = None
 
 
 class BasePin:
@@ -69,7 +72,7 @@ class OutputPin(BasePin):
 
 
 @contextmanager
-def gpio_session(numbering_system=GPIO.BCM):
+def gpio_session(numbering_system):
     """
     Setup board numbering system, and cleanup everything when done.
 
@@ -82,7 +85,6 @@ def gpio_session(numbering_system=GPIO.BCM):
     inputs with no pull up/down, you can avoid accidental damage to your RPi by shorting out the pins. Note that this
     will only clean up GPIO channels that your script has used. Note that GPIO.cleanup()
     also clears the pin numbering system in use.
-
 
     :param numbering_system: ``GPIO.BOARD`` or ``GPIO.BCM``
     """

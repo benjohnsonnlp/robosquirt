@@ -1,12 +1,11 @@
 import logging
-import RPi.GPIO as GPIO
 import time
 
-from robosquirt.robosquirt.utils import OutputPin
+from .utils import OutputPin
 
 
-ON = GPIO.HIGH
-OFF = GPIO.LOW
+ON = 1
+OFF = 0
 
 
 class Valve:
@@ -32,17 +31,18 @@ class Valve:
         """
         Actually poll the GPIO input for the state.
         """
-        return "open" if self.pin.current_state == ON else "close"
+        return "open" if self.pin.current_state == ON else "closed"
 
     def open(self):
         """
         Open the valve.
         """
-        if self.pin.current_state == ON:
+        if self.pin.current_state == ON:  # pragma: no cover
             logging.error(("Requested the valve channel {} open, "
                            "component indicates valve is already open.").format(self.pin.channel))
             return
-        if self.is_open:  # Trying to open a valve that is already open may indicate a bug:
+        if self.is_open:  # pragma: no cover
+            # Trying to open a valve that is already open may indicate a bug:
             logging.warning("Valve is already open.")
             return
         self.pin.send_high()
@@ -53,11 +53,12 @@ class Valve:
         """
         Close the valve.
         """
-        if self.pin.current_state == OFF:
+        if self.pin.current_state == OFF:  # pragma: no cover
             logging.error(("Requested valve on channel {}, close"
                            "component indicates valve is already closed.").format(self.pin.channel))
             return
-        if not self.is_open:  # Trying to close a valve that is already open may indicate a bug:
+        if not self.is_open:  # pragma: no cover
+            # Trying to close a valve that is already open may indicate a bug:
             logging.warning("Valve is already closed.")
             return
         self.pin.send_low()
