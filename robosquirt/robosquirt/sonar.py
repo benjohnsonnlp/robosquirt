@@ -1,54 +1,56 @@
-import logging
 import RPi.GPIO as GPIO
 import time
 
+# GPIO Mode (BOARD / BCM)
+GPIO.setmode(GPIO.BCM)
 
-def make_do():
-    GPIO.setmode(GPIO.BCM)
+# set GPIO Pins
+GPIO_TRIGGER = 18
+GPIO_ECHO = 24
 
-    TRIG = 23
-    ECHO = 24
+# set GPIO direction (IN / OUT)
+GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
+GPIO.setup(GPIO_ECHO, GPIO.IN)
 
-    logging.info("Distance Measurement In Progress")
 
-    GPIO.setup(TRIG, GPIO.OUT)
-    GPIO.setup(ECHO, GPIO.IN)
-
-    GPIO.output(TRIG, False)
-    logging.info("Waiting For Sensor To Settle")
-    time.sleep(2)
-
-    # Send pulse signal for 10 µsec
-    GPIO.output(TRIG, True)
+def distance():
+    # set Trigger to HIGH
+    GPIO.output(GPIO_TRIGGER, True)
+    print('trigger to high')
+    # set Trigger after 0.01ms to LOW
     time.sleep(0.00001)
-    GPIO.output(TRIG, False)
+    GPIO.output(GPIO_TRIGGER, False)
+    print('trigger to low')
+    StartTime = time.time()
+    StopTime = time.time()
 
-    logging.info("Listen...")
-    # Listen for return signal.
-    while GPIO.input(ECHO) == 0:
-        pulse_start = time.time()
+    # save StartTime
+    while GPIO.input(GPIO_ECHO) == 0:
+        StartTime = time.time()
 
-    while GPIO.input(ECHO) == 1:
-        pulse_end = time.time()
+    print('echo low')
 
-    logging.info("Calculating distance")
-    pulse_duration = pulse_end - pulse_start
+    # save time of arrival
+    while GPIO.input(GPIO_ECHO) == 1:
+        StopTime = time.time()
+    print('echo high')
+    # time difference between start and arrival
+    TimeElapsed = StopTime - StartTime
+    # multiply with the sonic speed (34300 cm/s)
+    # and divide by 2, because there and back
+    distance = (TimeElapsed * 34300) / 2
 
-    distance = pulse_duration * 17150
-
-    distance = round(distance, 2)
-
-    logging.info("Distance:", distance, "cm")
-
-    GPIO.cleanup()
+    return distance
 
 
-if __name__ == "__main__":
-    import sys
+if __name__ == '__main__':
+    try:
+        while True:
+            dist = distance()
+            print("Measured Distance = %.1f cm" % dist)
+            time.sleep(1)
 
-    logging.basicConfig(
-        stream=sys.stdout,
-        level=logging.INFO,
-        format="%(asctime)s -  %(levelname)s - %(name)s - %(message)s"
-    )
-    make_do()
+            # Reset by pressing CTRL + C
+    except KeyboardInterrupt:
+        print("Measurement stopped by User")
+        GPIO.cleanup()
