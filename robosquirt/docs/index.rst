@@ -8,6 +8,7 @@ Welcome to RoboSquirt's documentation!
    readme
    installation
    usage
+   server_message_format
    modules
    contributing
    history

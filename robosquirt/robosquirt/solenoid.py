@@ -16,11 +16,12 @@ class Valve:
     # We track the state of the valve here.
     is_open = False
 
-    def __init__(self, pin):
+    def __init__(self, pin, identifier=0):
         """
         :param pin: The Raspberry PI pin number the valve is on
         """
         self.pin = OutputPin(pin)
+        self.identifier = identifier
 
     def get_status(self):
         return "open" if self.is_open else "closed"
@@ -61,7 +62,7 @@ class Valve:
             logging.warning("Valve is already closed.")
             return
         if self.pin.current_state == OFF:  # pragma: no cover
-            logging.error(("Requested valve on channel {}, close"
+            logging.error(("Requested valve on channel {} close, "
                            "component indicates valve is already closed.").format(self.pin.channel))
             return
         self.pin.send_low()
@@ -86,3 +87,15 @@ class Valve:
         self.open()
         time.sleep(seconds_on)
         self.close()
+
+    def handle_message(self, message):
+        if message["identifier"] != self.identifier:
+            return False, "This message is for the wrong valve."
+        action = message["action"]
+        if action == "close":
+            self.close()
+        if action == "open":
+            self.open()
+        if action == "toggle":
+            self.toggle()
+        return True, None
