@@ -1,13 +1,13 @@
 import logging
-from .solenoid import Valve
-from .utils import gpio_session
+from robosquirt.solenoid import Valve
+from robosquirt.utils import gpio_session
 
 
 if __name__ == "__main__":
     import sys
     logging.basicConfig(
         stream=sys.stdout,
-        level=logging.INFO,
+        level=logging.DEBUG,
         format="%(asctime)s -  %(levelname)s - %(name)s - %(message)s"
     )
     channel = 18
@@ -15,6 +15,10 @@ if __name__ == "__main__":
         my_valve = Valve(18)
         my_valve.open()
         my_valve.close()
-        my_valve.test()
+        print("Get ready...")
+        import time
+        time.sleep(4)
+
+        my_valve.test(seconds_on=10)
         print(my_valve.status)
         print(my_valve.real_status)

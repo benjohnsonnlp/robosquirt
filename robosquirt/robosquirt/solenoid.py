@@ -22,6 +22,9 @@ class Valve:
         """
         self.pin = OutputPin(pin)
 
+    def get_status(self):
+        return "open" if self.is_open else "closed"
+
     @property
     def status(self):
         return "open" if self.is_open else "closed"
@@ -37,13 +40,13 @@ class Valve:
         """
         Open the valve.
         """
-        if self.pin.current_state == ON:  # pragma: no cover
-            logging.error(("Requested the valve channel {} open, "
-                           "component indicates valve is already open.").format(self.pin.channel))
-            return
         if self.is_open:  # pragma: no cover
             # Trying to open a valve that is already open may indicate a bug:
             logging.warning("Valve is already open.")
+            return
+        if self.pin.current_state == ON:  # pragma: no cover
+            logging.error(("Requested the valve channel {} open, "
+                           "component indicates valve is already open.").format(self.pin.channel))
             return
         self.pin.send_high()
         self.is_open = True
@@ -53,13 +56,13 @@ class Valve:
         """
         Close the valve.
         """
-        if self.pin.current_state == OFF:  # pragma: no cover
-            logging.error(("Requested valve on channel {}, close"
-                           "component indicates valve is already closed.").format(self.pin.channel))
-            return
         if not self.is_open:  # pragma: no cover
             # Trying to close a valve that is already open may indicate a bug:
             logging.warning("Valve is already closed.")
+            return
+        if self.pin.current_state == OFF:  # pragma: no cover
+            logging.error(("Requested valve on channel {}, close"
+                           "component indicates valve is already closed.").format(self.pin.channel))
             return
         self.pin.send_low()
         self.is_open = False

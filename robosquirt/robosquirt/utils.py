@@ -3,8 +3,8 @@ from functools import partial
 import logging
 try:
     import RPi.GPIO as GPIO
-except ImportError:
-    GPIO = None
+except ImportError:  # If we're running in a non-raspberry pi env, import the GPIO emulator
+    import RPi.GPIO as GPIO
 
 
 class BasePin:
@@ -56,6 +56,7 @@ class OutputPin(BasePin):
     def __init__(self, channel):
         super().__init__(channel)
         GPIO.setup(self.channel, GPIO.OUT)
+        self._register()
 
     @property
     def current_state(self):
@@ -72,7 +73,7 @@ class OutputPin(BasePin):
 
 
 @contextmanager
-def gpio_session(numbering_system):
+def gpio_session(numbering_system=GPIO.BCM):
     """
     Setup board numbering system, and cleanup everything when done.
 

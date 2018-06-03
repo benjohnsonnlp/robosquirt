@@ -2,10 +2,11 @@ from django.conf import settings
 from django.urls import include, path
 from django.views import defaults as default_views
 
-from .views import Index
+from .views import Index, Toggle
 
 urlpatterns = [
     path("", Index.as_view(), name="index"),
+    path("toggle/", Toggle.as_view(), name="toggle")
 ]
 
 if settings.DEBUG:
