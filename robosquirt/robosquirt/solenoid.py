@@ -45,7 +45,7 @@ class Valve:
         if self.is_open:  # Trying to open a valve that is already open may indicate a bug:
             logging.warning("Valve is already open.")
             return
-        self.pin.output(ON)
+        self.pin.send_high()
         self.is_open = True
         logging.debug("Valve opened.")
 
@@ -60,8 +60,7 @@ class Valve:
         if not self.is_open:  # Trying to close a valve that is already open may indicate a bug:
             logging.warning("Valve is already closed.")
             return
-        self.pin.output(OFF)
-        GPIO.output(self.pin, OFF)
+        self.pin.send_low()
         self.is_open = False
         logging.debug("Valve closed.")
 
@@ -83,4 +82,3 @@ class Valve:
         self.open()
         time.sleep(seconds_on)
         self.close()
-

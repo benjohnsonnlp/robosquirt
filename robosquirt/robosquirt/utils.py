@@ -61,6 +61,12 @@ class OutputPin(BasePin):
         """
         return GPIO.input(self.channel)
 
+    def send_high(self):
+        self.output(GPIO.HIGH)
+
+    def send_low(self):
+        self.output(GPIO.LOW)
+
 
 @contextmanager
 def gpio_session(numbering_system=GPIO.BCM):
