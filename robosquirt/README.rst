@@ -19,6 +19,10 @@ ToDo
 
 Everything!
 
+# Wiring
+
+!(wiring)[https://www.bc-robotics.com/wp-content/uploads/2015/07/sketch1.jpg]
+
 
 Quick Start
 -----------
