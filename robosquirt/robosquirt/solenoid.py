@@ -1,5 +1,6 @@
 import logging
 import time
+import threading
 
 from .utils import OutputPin
 
@@ -22,9 +23,7 @@ class Valve:
         """
         self.pin = OutputPin(pin)
         self.identifier = identifier
-
-    def get_status(self):
-        return "open" if self.is_open else "closed"
+        self.lock = threading.RLock()  # Prevent resource contention across threads.
 
     @property
     def status(self):
@@ -35,7 +34,8 @@ class Valve:
         """
         Actually poll the GPIO input for the state.
         """
-        return "open" if self.pin.current_state == ON else "closed"
+        with self.lock:
+            return "open" if self.pin.current_state == ON else "closed"
 
     def open(self):
         """
@@ -45,13 +45,14 @@ class Valve:
             # Trying to open a valve that is already open may indicate a bug:
             logging.warning("Valve is already open.")
             return
-        if self.pin.current_state == ON:  # pragma: no cover
-            logging.error(("Requested the valve channel {} open, "
-                           "component indicates valve is already open.").format(self.pin.channel))
-            return
-        self.pin.send_high()
-        self.is_open = True
-        logging.debug("Valve opened.")
+        with self.lock:
+            if self.pin.current_state == ON:  # pragma: no cover
+                logging.error(("Requested the valve channel {} open, "
+                               "component indicates valve is already open.").format(self.pin.channel))
+                return
+            self.pin.send_high()
+            self.is_open = True
+            logging.debug("Valve opened.")
 
     def close(self):
         """
@@ -61,13 +62,14 @@ class Valve:
             # Trying to close a valve that is already open may indicate a bug:
             logging.warning("Valve is already closed.")
             return
-        if self.pin.current_state == OFF:  # pragma: no cover
-            logging.error(("Requested valve on channel {} close, "
-                           "component indicates valve is already closed.").format(self.pin.channel))
-            return
-        self.pin.send_low()
-        self.is_open = False
-        logging.debug("Valve closed.")
+        with self.lock:
+            if self.pin.current_state == OFF:  # pragma: no cover
+                logging.error(("Requested valve on channel {} close, "
+                               "component indicates valve is already closed.").format(self.pin.channel))
+                return
+            self.pin.send_low()
+            self.is_open = False
+            logging.debug("Valve closed.")
 
     def toggle(self):
         """
@@ -93,7 +95,7 @@ class Valve:
         Handle a message from a client of the Robosquirt server requesting some action be taken.
 
         :param message: A message from a client of the Robosquirt server. This will have already been validated.
-        :return: A tuple of ``(<bool: did actione succeed?>, and <None> or <Str: error if it failed>)``
+        :return: A tuple of ``(<bool: did action succeed?>, and <None> or <Str: error if it failed>)``
         """
         if message["identifier"] != self.identifier:
             return False, "This message is for the wrong valve."

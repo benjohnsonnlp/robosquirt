@@ -1,5 +1,5 @@
 import logging
-from robosquirt.server.core import serve_forever
+from robosquirt.server.core import main
 
 if __name__ == "__main__":
     import sys
@@ -9,5 +9,5 @@ if __name__ == "__main__":
         format="%(asctime)s -  %(levelname)s - %(name)s - %(message)s"
     )
     logging.getLogger('pizco.pizco').setLevel(logging.INFO)
-    serve_forever()
+    main()
 
