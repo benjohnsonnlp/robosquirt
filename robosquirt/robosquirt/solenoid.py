@@ -20,10 +20,12 @@ class Valve:
     def __init__(self, pin, identifier=0):
         """
         :param pin: The Raspberry PI pin number the valve is on
+        :param identifier: The unique identifier of the valve, not used for anything yet.
         """
         self.pin = OutputPin(pin)
         self.identifier = identifier
-        self.lock = threading.RLock()  # Prevent resource contention across threads.
+        # Prevent resource contention across threads, acquired when opening, closing or querying the valve.
+        self.lock = threading.RLock()
 
     @property
     def status(self):
