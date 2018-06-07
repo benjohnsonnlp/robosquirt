@@ -2,10 +2,10 @@ import logging
 import pprint
 import signal
 import threading
-import time
 import voluptuous
 import zmq
 
+from robosquirt.analytics.models import create_tables_if_needed
 from robosquirt.solenoid import Valve
 from robosquirt.utils import gpio_session
 
@@ -143,6 +143,7 @@ class Server(threading.Thread):
 
 
 def main():
+    create_tables_if_needed()
     with gpio_session():
         main_proc = Main(18)
         main_proc.run()

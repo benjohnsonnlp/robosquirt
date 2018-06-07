@@ -5,6 +5,13 @@ Base settings to build other settings files upon.
 import environ
 import os
 
+from moistmaster.config import config
+
+
+def sqlite_conn_path():
+    return "{pth}/robosquirt.db".format(pth=config["sqlite_db_path"])
+
+
 ROOT_DIR = environ.Path(__file__) - 3  # Django project root
 APPS_DIR = ROOT_DIR.path('moistmaster') # Moistmaster dir
 
@@ -49,14 +56,25 @@ DJANGO_APPS = [
     'django.contrib.humanize',
 ]
 THIRD_PARTY_APPS = [
+    'compressor',
     'rest_framework',
 ]
 LOCAL_APPS = [
-    'debug_toolbar'
+    'debug_toolbar',
+    'analytics',
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': sqlite_conn_path(),
+    }
+}
+
 
 # MIGRATIONS
 # ------------------------------------------------------------------------------
@@ -129,6 +147,7 @@ STATICFILES_DIRS = [
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 ]
 
 # MEDIA
@@ -187,12 +206,7 @@ ADMINS = [
 MANAGERS = ADMINS
 
 
-
-# django-compressor
 # ------------------------------------------------------------------------------
-# https://django-compressor.readthedocs.io/en/latest/quickstart/#installation
-INSTALLED_APPS += ['compressor']
-STATICFILES_FINDERS += ['compressor.finders.CompressorFinder']
 # Your stuff...
 # ------------------------------------------------------------------------------
 SECRET_KEY = env('DJANGO_SECRET_KEY', default='Q7Nnmm0lBJ7F6JLTPk6vpHJ2eciARLPSNqFGXBpHe7uk8dDoFowcoF9wZwOJJqPY')

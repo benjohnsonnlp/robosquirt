@@ -1,13 +1,82 @@
 {% extends "base.html" %}
 {% load static i18n compress%}
-{%  block body %}
+{% block css %}
+  {{ block.super }}
+  <style>
+    .main {
+      background-color: #00A000;
+      background-image: url("{%  static 'images/droplets.jpg' %}");
+      background-repeat: no-repeat;
+      background-position: top -50px right 0px;
+      background-size:cover;
+      margin-bottom: 25px;
 
+    }
+    form {
+      margin-bottom: 10px;
+    }
+
+    .main h1 {
+      color: #fff;
+      margin-top: 150px;
+    }
+
+    #controller {
+      background-color:rgba(255, 255, 255, 0.5);
+      border-radius: 20px;
+      padding: 50px;
+      width: 300px;
+      margin-bottom: 100px;
+    }
+    #controller h3 {
+      font-size: 22px;
+    }
+
+  </style>
+{%  endblock %}
+{%  block body %}
+<section class="main">
     <div class="container">
-      <h1>Hello, world! I'm feeling {%  if valve_is_open %}moist <img src="{% static 'images/svg-icons/droplet.svg' %}" alt="Sploosh" width="20">{% else %}dry{% endif %}.</h1>
-      <p>Status: {{ valve_status }}</p>
-      <form action="{% url 'toggle' %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-primary">{%  if valve_is_open %}Turn off{% else %}Turn on{% endif %}</button>
-      </form>
+      <div class="row">
+        <h1>Welcome to Robosquirt!</h1>
+      </div>
+      <div class="row">
+        <div id="controller">
+          <h2>Water Control</h2>
+          <p>Right now, the water is {%  if valve_is_open %}on{% else %}off{% endif %}</p>
+          <form action="{% url 'toggle' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">{%  if valve_is_open %}Turn off{% else %}Turn on <img src="{% static 'images/svg-icons/droplet.svg' %}" alt="Sploosh" width="20">{% endif %}</button>
+          </form>
+        </div>
+      </div>
     </div>
+</section>
+<section class="event-list">
+  <div class="container">
+    <div class="row">
+      <h2>Past Watering Events</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Valve #</th>
+            <th scope="col">Start</th>
+            <th scope="col">Stop</th>
+            <th scope="col">Length</th>
+            <th scope="col">Gallons (approx.)</th>
+          </tr>
+        </thead>
+        <tbody>{%  for session in watering_sessions %}
+          <tr>
+            <td>{{ session.valve_number }}</td>
+            <td>{{ session.session_start }}</td>
+            <td>{{ session.session_end|default:"still running" }}</td>
+            <td>{{ session.length_label }}</td>
+            <td>{{ session.gallons|floatformat:2 }}</td>
+          </tr>
+        {%  endfor %}</tbody>
+      </table>
+    </div>
+  </div>
+</section>
 {%  endblock %}

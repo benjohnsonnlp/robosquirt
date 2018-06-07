@@ -1,6 +1,8 @@
 from contextlib import contextmanager
+from datetime import datetime
 from functools import partial
 import logging
+import pytz
 try:
     import RPi.GPIO as GPIO
 except ImportError:  # If we're running in a non-raspberry pi env, import the GPIO emulator
@@ -95,3 +97,7 @@ def gpio_session(numbering_system=GPIO.BCM):
     yield
     GPIO.cleanup()
     logging.debug("GPIO Session closed.")
+
+
+def utc_now():
+    return pytz.UTC.localize(datetime.utcnow())

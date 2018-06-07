@@ -9,7 +9,7 @@ class RobosquirtClient:
     Communicate with a robosquirt process over a ZMQ message bus.
     """
 
-    def __init__(self, port=8001, timeout_ms=20000):
+    def __init__(self, port=8001, timeout_ms=5000):
         self.context = zmq.Context()
         self.context.setsockopt(zmq.LINGER, 0)
         self.context.setsockopt(zmq.RCVTIMEO, timeout_ms)
@@ -18,8 +18,11 @@ class RobosquirtClient:
         logger.info("Connected to Robosquirt server on port {}...".format(port))
 
     def _send_and_recieve(self, message_obj):
-        self.socket.send_json(message_obj)
-        return self.socket.recv_json()
+        try:
+            self.socket.send_json(message_obj)
+            return self.socket.recv_json()
+        except zmq.error.Again:
+            return {}
 
     def _do_action(self, action, identifier):
         return self._send_and_recieve({"entity": "valve",

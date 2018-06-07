@@ -2,6 +2,7 @@ import logging
 import time
 import threading
 
+from .analytics.session import WateringSession
 from .utils import OutputPin
 
 
@@ -16,6 +17,8 @@ class Valve:
 
     # We track the state of the valve here.
     is_open = False
+    # robosquirt.analytics.session.WateringSession objects will be placed here when valve is open.
+    watering_session = None
 
     def __init__(self, pin, identifier=0):
         """
@@ -52,7 +55,9 @@ class Valve:
                 logging.error(("Requested the valve channel {} open, "
                                "component indicates valve is already open.").format(self.pin.channel))
                 return
+            self.watering_session = WateringSession(self.identifier)
             self.pin.send_high()
+            self.watering_session.start()
             self.is_open = True
             logging.debug("Valve opened.")
 
@@ -70,6 +75,8 @@ class Valve:
                                "component indicates valve is already closed.").format(self.pin.channel))
                 return
             self.pin.send_low()
+            self.watering_session.end()
+            del self.watering_session
             self.is_open = False
             logging.debug("Valve closed.")
 
