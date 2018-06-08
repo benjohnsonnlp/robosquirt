@@ -3,23 +3,21 @@ moistmaster
 
 A Django app for running a robosquirt controller
 
-.. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
-     :target: https://github.com/pydanny/cookiecutter-django/
-     :alt: Built with Cookiecutter Django
-
 
 :License: BSD
 
 
-Settings
---------
-
-Moved to settings_.
-
-.. _settings: http://cookiecutter-django.readthedocs.io/en/latest/settings.html
-
 Basic Commands
 --------------
+
+Running the dev server
+^^^^^^^^^^^^^^^^^^^^^^
+
+To run the Django dev server:
+
+    $> DJANGO_DEBUG=true ./manage.py runserver
+
+
 
 Setting Up Your Users
 ^^^^^^^^^^^^^^^^^^^^^
@@ -48,21 +46,7 @@ Running tests with py.test
 
   $ py.test
 
-Live reloading and Sass CSS compilation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Moved to `Live reloading and SASS compilation`_.
-
-.. _`Live reloading and SASS compilation`: http://cookiecutter-django.readthedocs.io/en/latest/live-reloading-and-sass-compilation.html
-
-
-
-
-
-Deployment
-----------
-
-The following details how to deploy this application.
+=
 
 
 
