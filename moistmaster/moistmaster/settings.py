@@ -211,6 +211,7 @@ MANAGERS = ADMINS
 # ------------------------------------------------------------------------------
 SECRET_KEY = env('DJANGO_SECRET_KEY', default='Q7Nnmm0lBJ7F6JLTPk6vpHJ2eciARLPSNqFGXBpHe7uk8dDoFowcoF9wZwOJJqPY')
 ALLOWED_HOSTS = [
+    "*",
     "localhost",
     "0.0.0.0",
     "127.0.0.1",
