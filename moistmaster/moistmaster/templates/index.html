@@ -36,6 +36,9 @@
 {%  endblock %}
 {%  block body %}
 <section class="main">
+    {% if valve_status == "unavailable" %}
+  <div class="alert alert-danger" role="alert"><strong>ERROR:</strong> Cannot communicate with robosquirt server...</div>
+    {% endif %}
     <div class="container">
       <div class="row">
         <h1>Welcome to Robosquirt!</h1>

@@ -1,6 +1,8 @@
 from django.conf import settings
+from django.conf.urls import url
 from django.urls import include, path
 from django.views import defaults as default_views
+import debug_toolbar
 
 from .views import Index, Toggle
 
@@ -29,7 +31,4 @@ if settings.DEBUG:
             kwargs={"exception": Exception("Page not Found")},
         ),
         path("500/", default_views.server_error),
-    ]
-    if "debug_toolbar" in settings.INSTALLED_APPS:
-        import debug_toolbar
-        urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
+        url(r'^__debug__/', include(debug_toolbar.urls))]
