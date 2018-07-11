@@ -104,3 +104,5 @@ ENV/
 
 # SQlite files.
 *.db
+
+robosquirt/*.conf

@@ -71,10 +71,7 @@ def get_configuration(name="robosquirt"):
             name=name,
             paths=", ".join(candidate_locations)))
 
-    return {
-        "sqlite_db_path": get_conf("Database", "path") or str(get_project_root()),
-        "log_debug": getbool_conf("Logging", "debug") or True,
-    }
+    return conf
 
 
 config = get_configuration()
