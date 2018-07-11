@@ -57,7 +57,6 @@ def get_configuration(name="robosquirt"):
     conf = ExpandedConfigParser({
         "debug": "false",
         "hostname": "localhost",
-        "routing_key": None
     })
     candidate_locations = [os.path.join(loc, conf_file_name) for loc in locations if loc]
     conf.read(candidate_locations)

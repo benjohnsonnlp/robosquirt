@@ -11,3 +11,7 @@ def message_user(recipient, message, username=settings_username, password=settin
     natalie = client.searchForUsers(name=recipient)[0]
 
     client.send(fbchat.Message(text=message), thread_id=natalie.uid)
+
+
+if __name__ == '__main__':
+    message_user('ben johnson', 'test')
