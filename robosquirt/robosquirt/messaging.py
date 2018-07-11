@@ -1,16 +1,18 @@
 import fbchat
 
-from robosquirt.robosquirt.config import config
+from config import config
 
 settings_username = config.get('facebook', 'username')
 settings_password = config.get('facebook', 'password')
 
+print(settings_username, settings_password)
+
 def message_user(recipient, message, username=settings_username, password=settings_password):
     client = fbchat.Client(username, password)
 
-    natalie = client.searchForUsers(name=recipient)[0]
+    recipient_user = client.searchForUsers(name=recipient)[0]
 
-    client.send(fbchat.Message(text=message), thread_id=natalie.uid)
+    client.send(fbchat.Message(text=message), thread_id=recipient_user.uid)
 
 
 if __name__ == '__main__':
