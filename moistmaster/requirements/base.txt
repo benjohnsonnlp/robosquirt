@@ -11,3 +11,4 @@ djangorestframework==3.8.2
 pyzmq==17.0.0
 tornado==5.0.2
 zmq==0.0.0
+requests==2.19.1
