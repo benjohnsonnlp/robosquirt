@@ -5,7 +5,6 @@ from config import config
 settings_username = config.get('facebook', 'username')
 settings_password = config.get('facebook', 'password')
 
-print(settings_username, settings_password)
 
 def message_user(recipient, message, username=settings_username, password=settings_password):
     client = fbchat.Client(username, password)
