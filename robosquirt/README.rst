@@ -29,7 +29,14 @@ Quick Start
 
 Run this stuff::
 
-    $> pip install -r requirements.txt
+    $> pip install -r requirements/base.txt
     $> python3 -m robosquirt.server
 
 If your platform isn't identified as Linux, it's assumed you're not running the code on an actual Rasperry Pi, and ``pip install`` will install a Raspberry Pi emulator and use that instead.
+
+Optionally, install development requirements::
+
+    $> pip install -r requirements/dev.txt
+
+
+

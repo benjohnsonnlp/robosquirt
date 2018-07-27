@@ -1,13 +1,13 @@
 pytz==2018.4  # https://github.com/stub42/pytz
-python-slugify==1.2.5  # https://github.com/un33k/python-slugify
 
 # Django
 # ------------------------------------------------------------------------------
 django==2.0.6  # pyup: < 2.1  # https://www.djangoproject.com/
 django-compressor==2.2  # https://github.com/django-compressor/django-compressor
-django-environ==0.4.4 # Whyyyy?
-djangorestframework==3.8.2
+django-debug-toolbar==1.9.1
 
+# Robosquirt libs
+# ------------------------------------------------------------------------------
 pyzmq==17.0.0
 tornado==5.0.2
 zmq==0.0.0
