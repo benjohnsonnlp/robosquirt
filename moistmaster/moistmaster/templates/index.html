@@ -1,58 +1,47 @@
 {% extends "base.html" %}
 {% load static i18n compress%}
 {% block css %}
-  {{ block.super }}
-  <style>
-    .main {
-      background-color: #00A000;
-      background-image: url("{%  static 'images/droplets.jpg' %}");
-      background-repeat: no-repeat;
-      background-position: top -50px right 0px;
-      background-size:cover;
-      margin-bottom: 25px;
+    {{ block.super }}
 
-    }
-    form {
-      margin-bottom: 10px;
-    }
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
 
-    .main h1 {
-      color: #fff;
-      margin-top: 150px;
-    }
+{% endblock %}
 
-    #controller {
-      background-color:rgba(255, 255, 255, 0.5);
-      border-radius: 20px;
-      padding: 50px;
-      width: 300px;
-      margin-bottom: 100px;
-    }
-    #controller h3 {
-      font-size: 22px;
-    }
-
-  </style>
-{%  endblock %}
 {%  block body %}
 <section class="main">
     {% if valve_status == "unavailable" %}
-  <div class="alert alert-danger" role="alert"><strong>ERROR:</strong> Cannot communicate with robosquirt server...</div>
+    <div class="alert alert-danger" role="alert"><strong>ERROR:</strong> Cannot communicate with robosquirt server...</div>
     {% endif %}
-    <div class="container">
-      <div class="row">
-        <h1>Welcome to Robosquirt!</h1>
-      </div>
-      <div class="row">
-        <div id="controller">
-          <h2>Water Control</h2>
-          <p>Right now, the water is {%  if valve_is_open %}on{% else %}off{% endif %}</p>
-          <form action="{% url 'toggle' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">{%  if valve_is_open %}Turn off{% else %}Turn on <img src="{% static 'images/svg-icons/droplet.svg' %}" alt="Sploosh" width="20">{% endif %}</button>
-          </form>
-        </div>
-      </div>
+    <h1 class="logotype">robosquirt</h1>
+    <div class="status ">
+        {%  if valve_is_open %}
+        <img src="{% static 'images/svg-icons/spigot-on.svg' %}" alt="Valve is open" width="200">
+        {% else %}
+        <img src="{% static 'images/svg-icons/spigot-off.svg' %}" alt="Valve is closed" width="200">
+        {% endif %}
+    </div>
+    <div class="stripe">
+        <ul class="tools">
+            <li class="manual-activation">
+                <form action="{% url 'toggle' %}" method="post" class="{{ valve_is_open|yesno:'turn-off,turn-on' }}">
+                    {% csrf_token %}
+
+                    <button type="submit" class="btn btn-primary">{% if valve_is_open %}Turn off{% else %}Turn on <img src="{% static 'images/svg-icons/droplet.svg' %}" alt="Sploosh" width="20">{% endif %}</button>
+                </form>
+            </li>
+            <li>
+                <div class="value">2<span class="unit"> hours</span></div>
+                <div class="label">Estimated time to next watering</div>
+            </li>
+            <li>
+                <div class="value image"><img src="{% static 'images/svg-icons/sun.svg' %}" width="80"></div>
+                <div class="label">Clear Skies</div>
+            </li>
+            <li>
+                <div class="value">25<span class="unit"> gal.</span></div>
+                <div class="label">Water used in the last 5 days</div>
+            </li>
+        </ul>
     </div>
 </section>
 <section class="event-list">
