@@ -57,7 +57,6 @@ def get_configuration(name="robosquirt"):
     conf = ExpandedConfigParser({
         "debug": "false",
         "hostname": "localhost",
-        "routing_key": None
     })
     candidate_locations = [os.path.join(loc, conf_file_name) for loc in locations if loc]
     conf.read(candidate_locations)
@@ -71,10 +70,7 @@ def get_configuration(name="robosquirt"):
             name=name,
             paths=", ".join(candidate_locations)))
 
-    return {
-        "sqlite_db_path": get_conf("Database", "path") or str(get_project_root()),
-        "log_debug": getbool_conf("Logging", "debug") or True,
-    }
+    return conf
 
 
 config = get_configuration()
