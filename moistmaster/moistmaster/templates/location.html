@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static i18n compress crispy_forms_tags %}
+
+{% block title %}Your location{% endblock title %}
+
+{% block css %}
+    {{ block.super }}
+
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/secondary.css' %}" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+
+{% endblock %}
+
+{%  block body %}
+<header class="main">
+    <h1 class="logotype">robosquirt</h1>
+</header>
+<section class="setup secondary">
+  <div class="container">
+      {% if not settings or not settings.location %}
+      <h2>Your current location: not set</h2>
+      <div class="alert alert-warning" role="alert">
+        <strong>Uh-oh!</strong> You haven't selected a location yet.
+          Robosquirt works better if you let it know where you are located. It uses this information to fetch
+          your local forecast and make smarter watering decisions based on whether it might rain.<br>
+          <a class="btn btn-info" href="{% url 'location-lookup' %}" role="button">Set your location.</a>
+      </div>
+      {% else %}
+      <h2>Your current location: {{ settings.location }} <small>(<a href="{% url 'location-lookup' %}">change</a>)</small></h2>
+      <div class="row">
+        <div class="col-4">
+          <div id="map-container"></div>
+        </div>
+        <div class="col-8">
+            <h3>Forecast</h3>
+            {% for forecast in forecast_periods %}
+            <div class="forecast" id="forecast-{{ forloop.counter }}">
+                <h4>{{ forecast.name }}</h4>
+                <div class="media">
+                    <img class="mr-3" src="{{ forecast.icon }}">
+                    <dl class="media-body row">
+                        <dt class="col-sm-4">Forecast</dt>
+                        <dl class="col-sm-8">{{ forecast.shortForecast }}</dl>
+                        <dt class="col-sm-4">Temperature</dt>
+                        <dl class="col-sm-8">{{ forecast.temperature }}{{ forecast.temperatureUnit }}</dl>
+                        <dt class="col-sm-4">Wind speed/direction</dt>
+                        <dl class="col-sm-8">{{ forecast.windDirection }}, {{forecast.windSpeed }}</dl>
+                    </dl>
+                </div>
+                <a data-toggle="collapse" href="#forecast-detail-{{ forloop.counter }}" aria-expanded="false" aria-controls="forecast-detail-{{ forloop.counter }}">
+                    Extended Forecast &raquo;
+                </a>
+                <p class="collapse" id="forecast-detail-{{ forloop.counter }}">{{ forecast.detailedForecast }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+      </div>
+
+      {% endif %}
+  </div>
+</section>
+{%  endblock %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+   integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+   crossorigin=""></script>
+    <script src="{% static 'js/map.js' %}"></script>
+    <script>
+        var latitude = {{ settings.location.latitude }};
+        var longitude = {{ settings.location.longitude }};
+        var accessToken = "{{ mapbox_token }}";
+        // var accessToken = 'pk.eyJ1IjoibWF6ZWxpZmUiLCJhIjoiY2p3bzc5dW1qMXRyNzQ5bjBncnFjOWk0ZSJ9.Pe7o01Rb17rJFCVoA51EHw'
+        $(document).ready(function() {
+        renderMap("map-container", latitude, longitude, accessToken);
+        });
+    </script>
+{% endblock %}

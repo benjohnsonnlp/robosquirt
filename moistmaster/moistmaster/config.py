@@ -74,6 +74,7 @@ def get_configuration(name="robosquirt"):
     return {
         "sqlite_db_path": get_conf("Database", "path") or str(get_project_root()),
         "log_debug": getbool_conf("Logging", "debug") or True,
+        "mapbox_token": get_conf("Mapbox", "token") or None
     }
 
 

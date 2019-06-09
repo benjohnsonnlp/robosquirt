@@ -26,7 +26,7 @@ class RobosquirtClient:
         self.socket.connect('tcp://127.0.0.1:{port}'.format(port=self.port))
         self.poller = zmq.Poller()
         self.poller.register(self.socket, zmq.POLLIN)
-        logger.info("Connected to Robosquirt server on port {}...".format(self.port))
+        logger.info("Connecting to Robosquirt server on port {}...".format(self.port))
 
     def _teardown_connection(self):
         """
@@ -44,7 +44,7 @@ class RobosquirtClient:
         if self.socket in socks:
             return self.socket.recv_json()
         else:  # Socket didn't respond after ``self.timeout_ms`` milliseconds.
-            logger.warning("Unable to connect to Robosquirt server after {} milliseconds, closing socket...".format(
+            logger.warning("Unable to connect to Robosquirt server after {} milliseconds, closing socket.".format(
                 self.timeout_ms
             ))
             self._teardown_connection()

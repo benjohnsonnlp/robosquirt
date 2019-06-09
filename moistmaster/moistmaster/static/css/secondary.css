@@ -1,0 +1,24 @@
+section.secondary {
+    padding-top: 20px;
+}
+
+section.secondary h2 {
+    margin-bottom: 20px;
+}
+
+.alert .btn { margin-top: 10px;}
+
+
+.forecast dl {
+    margin-bottom: 0.3rem;
+}
+
+.forecast row {
+    margin-bottom: 0.3rem;
+}
+
+#map-container {
+    background-color: gray;
+    height: 350px;
+    width: 350px;
+}

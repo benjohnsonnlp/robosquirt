@@ -11,7 +11,6 @@ def sqlite_conn_path():
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print(BASE_DIR)
 root = lambda *x: os.path.join(BASE_DIR, *x)
 app = lambda *x: os.path.join(BASE_DIR, 'moistmaster', *x)
 
@@ -44,10 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'compressor',
     'crispy_forms',
+    'localflavor',
 ]
 
 PROJECT_APPS = [
     'analytics',
+    'geo'
 ]
 
 LOCAL_APPS = [
@@ -121,8 +122,6 @@ TEMPLATES = [
     },
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
 # LOGGING
 # ------------------------------------------------------------------------------
 LOGGING = {
@@ -147,7 +146,7 @@ LOGGING = {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'WARNING'),
         },
-        'alonsoville': {
+        'moistmaster': {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         }
@@ -171,3 +170,12 @@ ALLOWED_HOSTS = [
 ]
 
 INTERNAL_IPS = ["127.0.0.1", "localhost"]
+
+# CRISPY FORMS
+# ------------------------------------------------------------------------------
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Application Settings
+# ------------------------------------------------------------------------------
+MAPBOX_TOKEN = config["mapbox_token"]
+USGS_GNIS_DATA = os.path.join(BASE_DIR, "bundled_data", "USGS-GNIS-data-2019-20190501.txt")
