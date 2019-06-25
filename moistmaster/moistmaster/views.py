@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.forms import SetPasswordForm, AuthenticationForm, UsernameField
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -91,7 +92,8 @@ class SetPassword(FormView):
         try:
             user = User.objects.get()
         except User.DoesNotExist:
-            user = User.objects.create_user('admin', 'admin@example.com')
+            user = User.objects.create_user(settings.DEFAULT_USERNAME,
+                                            '{}@example.com'.format(settings.DEFAULT_USERNAME))
         return user
 
 
@@ -131,5 +133,5 @@ class Login(LoginView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['initial'] = {"username": "admin"}
+        kwargs['initial'] = {"username": settings.DEFAULT_USERNAME}
         return kwargs

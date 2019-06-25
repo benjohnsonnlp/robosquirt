@@ -158,6 +158,7 @@ LOGGING = {
 # ACCESS
 # ------------------------------------------------------------------------------
 LOGIN_URL = "login"
+DEFAULT_USERNAME = "admin"
 
 
 # ACCESS
