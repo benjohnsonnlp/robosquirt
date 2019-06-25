@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static i18n compress crispy_forms_tags %}
+{% block css %}
+    {{ block.super }}
+
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+
+{% endblock %}
+{% block title %}Login{% endblock %}
+
+{%  block body %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h5 class="card-title text-center">Sign In to Robosquirt</h5>
+            <form method="POST" class="form-signin">
+              {% csrf_token %}
+              {{ form|crispy }}
+              {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+              {% endif %}
+              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+              <hr class="my-4">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

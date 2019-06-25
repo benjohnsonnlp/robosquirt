@@ -39,7 +39,11 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY',
 INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
     'compressor',
+    'crispy_forms',
 ]
 
 PROJECT_APPS = [
@@ -73,6 +77,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
 ]
 if DEBUG:
     MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
@@ -115,6 +121,8 @@ TEMPLATES = [
     },
 ]
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 # LOGGING
 # ------------------------------------------------------------------------------
 LOGGING = {
@@ -145,6 +153,11 @@ LOGGING = {
         }
     },
 }
+
+
+# ACCESS
+# ------------------------------------------------------------------------------
+LOGIN_URL = "login"
 
 
 # ACCESS
