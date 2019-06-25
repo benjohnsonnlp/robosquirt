@@ -106,3 +106,4 @@ ENV/
 *.db
 
 robosquirt/*.conf
+.DS_Store

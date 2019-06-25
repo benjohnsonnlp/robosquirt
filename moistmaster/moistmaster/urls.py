@@ -4,10 +4,13 @@ from django.urls import include, path
 from django.views import defaults as default_views
 import debug_toolbar
 
-from .views import Index, Toggle
+from .views import Login, Index, ResetPassword, SetPassword, Toggle
 
 urlpatterns = [
     path("", Index.as_view(), name="index"),
+    path("login", Login.as_view(), name="login"),
+    path("set-password", SetPassword.as_view(), name="set-password"),
+    path("reset-password", ResetPassword.as_view(), name="reset-password"),
     path("toggle/", Toggle.as_view(), name="toggle")
 ]
 
