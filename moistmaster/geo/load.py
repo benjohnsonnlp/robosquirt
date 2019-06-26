@@ -1,4 +1,5 @@
 import csv
+import gzip
 import logging
 from math import ceil
 
@@ -15,7 +16,7 @@ class GNISLoader:
         self.path = path
 
     def load(self):
-        with open(self.path, "r", encoding="utf-8-sig") as fh:
+        with gzip.open(self.path, "rt", encoding="utf-8-sig") as fh:
             line_count = 0
             for i, _ in enumerate(fh):
                 line_count += 1

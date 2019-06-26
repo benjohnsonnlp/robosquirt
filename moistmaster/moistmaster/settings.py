@@ -178,4 +178,4 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Application Settings
 # ------------------------------------------------------------------------------
 MAPBOX_TOKEN = config["mapbox_token"]
-USGS_GNIS_DATA = os.path.join(BASE_DIR, "bundled_data", "USGS-GNIS-data-2019-20190501.txt")
+USGS_GNIS_DATA = os.path.join(BASE_DIR, "bundled_data", "USGS-GNIS-data-2019-20190501.txt.gz")
