@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
 PROJECT_APPS = [
     'analytics',
+    'forecast',
     'geo'
 ]
 

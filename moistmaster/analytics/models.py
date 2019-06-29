@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.timezone import now
 import math
 
+from .managers import WateringSessionQuerySet
+
 #: FIXME: This should not be a constant.
 GALLONS_PER_MINUTE = 2.1
 
@@ -17,6 +19,8 @@ class WateringSession(models.Model):
     device_identifier = models.IntegerField(null=False)
     originator = models.TextField()
     reason = models.TextField()
+
+    objects = WateringSessionQuerySet.as_manager()
 
     class Meta:
         db_table = "watering_session"

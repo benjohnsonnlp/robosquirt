@@ -8,6 +8,26 @@ h1.logotype {
   text-align: center;
   margin-bottom: 60px;
 }
+
+nav.navbar {
+    background: #64c6ff;
+}
+
+.main-navigation {
+    overflow: hidden;
+    padding-left: 75px;
+    width: 100%;
+}
+
+.main-navigation li {
+    float:left;
+    list-style-type: none;
+    margin-right: 20px;
+
+}
+
+
+
 .main {
   background-color: #00A1FF;
   padding-bottom: 70px;
@@ -48,6 +68,9 @@ h1.logotype {
                 font-size: 70px;
                 font-weight: 800;
                 line-height: 40px;
+            }
+            .tools .icon .label {
+                margin-top: 13px;
             }
             .tools .value img {
                 margin-top: -15px;

@@ -22,7 +22,7 @@ class Location(TemplateView):
         context = self.get_context_data(**kwargs)
         try:
             user_settings = UserSettings.objects.get()
-            forecast = self.get_forecast(user_settings)[:6]
+            forecast = list(self.get_forecast(user_settings))[:6]
         except UserSettings.DoesNotExist:
             user_settings = None
             forecast = None

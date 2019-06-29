@@ -8,6 +8,34 @@
 {% endblock %}
 
 {%  block body %}
+
+
+<div class="pos-f-t">
+  <nav class="navbar navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </nav>
+  <div class="collapse" id="navbarToggleExternalContent">
+    <div class="bg-dark p-2">
+        <ul class="main-navigation">
+            <li>
+                <a class="btn btn-primary" href="{% url 'location' %}" role="button">Location &amp; Forecast</a>
+            </li>
+            <li>
+                <a class="btn btn-primary" href="{% url 'watering-sessions' %}" role="button">Watering Events</a>
+            </li>
+            <li>
+                <form action="{% url 'reset-password' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Reset your password</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+  </div>
+
+</div>
 <section class="main">
     {% if valve_status == "unavailable" %}
     <div class="alert alert-danger" role="alert"><strong>ERROR:</strong> Cannot communicate with robosquirt server...</div>
@@ -33,12 +61,12 @@
                 <div class="value">2<span class="unit"> hours</span></div>
                 <div class="label">Estimated time to next watering</div>
             </li>
-            <li>
-                <div class="value image"><img src="{% static 'images/svg-icons/sun.svg' %}" width="80"></div>
-                <div class="label">Clear Skies</div>
+            <li class="icon">
+                <div class="value image"><img src="{% static forecast_icon %}" width="80" height="80"></div>
+                <div class="label" title="{{ forecast.forecast_short }}">{{ forecast_label }} in {{ user_settings.location.name }}</div>
             </li>
             <li>
-                <div class="value">25<span class="unit"> gal.</span></div>
+                <div class="value">{{ gallons_used|floatformat:"0" }}<span class="unit"> gal.</span></div>
                 <div class="label">Water used in the last 5 days</div>
             </li>
         </ul>
@@ -47,7 +75,7 @@
 <section class="event-list">
   <div class="container">
     <div class="row">
-      <h2>Past Watering Events</h2>
+      <h2>Recent Watering Events</h2>
       <table class="table table-striped">
         <thead>
           <tr>

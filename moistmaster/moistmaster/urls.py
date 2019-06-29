@@ -4,6 +4,7 @@ from django.urls import include, path
 from django.views import defaults as default_views
 import debug_toolbar
 
+from analytics.views import WateringSessions
 from .views import Login, Index, ResetPassword, SetPassword, Toggle
 from geo.views import Location, LocationLookup
 
@@ -14,7 +15,9 @@ urlpatterns = [
     path("reset-password", ResetPassword.as_view(), name="reset-password"),
     path("toggle/", Toggle.as_view(), name="toggle"),
     path("location/", Location.as_view(), name="location"),
-    path("location/lookup", LocationLookup.as_view(), name="location-lookup")
+    path("location/lookup", LocationLookup.as_view(), name="location-lookup"),
+    path("sessions", WateringSessions.as_view(), name="watering-sessions")
+
 ]
 
 if settings.DEBUG:

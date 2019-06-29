@@ -12,6 +12,8 @@ from django.views.generic import RedirectView, TemplateView, FormView
 from zmq import ZMQError
 
 from analytics.models import WateringSession
+from forecast.models import Forecast
+from geo.models import UserSettings
 from moistmaster.robosquirt import RobosquirtClient
 
 
@@ -38,14 +40,34 @@ class Index(LoginOrPasswordSetRequired, TemplateView):
 
     template_name = "index.html"
 
+    def forecast_icon_and_label(self, forecast):
+        if forecast.icon_type == "SUN":
+            return ("images/svg-icons/sun.svg", "Clear skies")
+        if forecast.icon_type == "MOON":
+            return ("images/svg-icons/moon.svg", "Clear skies")
+        if forecast.icon_type == "RAIN":
+            return ("images/svg-icons/rain.svg", "Rain")
+        if forecast.icon_type == "TSTORM":
+            return ("images/svg-icons/thunderstorm.svg" "Stormy")
+        return ("images/svg-icons/cloud.svg", "Cloudy")
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         status = client.get_status()
+        user_settings = UserSettings.objects.get()
+        forecast = Forecast.objects.current_forecast()
+        forecast_icon, forecast_label = self.forecast_icon_and_label(forecast)
         if status:
             valve_state = status["state"]
         else:
             valve_state = "unavailable"
-        context.update({"valve_status": valve_state,
+        context.update({"gallons_used": WateringSession.objects.gallons_used(),
+                        "user_settings": user_settings,
+                        "forecast": forecast,
+                        "forecast_icon": forecast_icon,
+                        "forecast_label": forecast_label,
+                        "valve_status": valve_state,
                         "valve_is_open": valve_state == "open",
                         "watering_sessions": WateringSession.objects.all().order_by("-session_start")})
         return context

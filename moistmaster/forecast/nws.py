@@ -2,12 +2,10 @@
 National Weather Service API
 """
 import logging
-
 import requests
 
 
 class BaseEndpoint:
-
     logger = logging.getLogger("moistmaster")
 
     headers = {
@@ -21,7 +19,6 @@ class BaseEndpoint:
 
 
 class Point(BaseEndpoint):
-
     url = "https://api.weather.gov/points/{},{}"
 
     def __init__(self, latitude, longitude):
@@ -41,8 +38,7 @@ class Point(BaseEndpoint):
 
     @property
     def hourly_forecast_url(self):
-        return self.properties["forecast"]
-
+        return self.properties["forecastHourly"]
 
 
 class Forecast(BaseEndpoint):
@@ -54,5 +50,76 @@ class Forecast(BaseEndpoint):
 
     @property
     def periods(self):
-        return self.properties["periods"]
+        for period in self.properties["periods"]:
+            forecast = ForecastParser(period)
+            period.update({
+                "precipitationProbability": forecast.precipitation_probability,
+                "isDaytime": forecast.is_daytime,
+                "iconType": forecast.icon_type
+            })
+            yield period
 
+
+class ForecastParser:
+
+    precipitation_not_expected = (
+        "partly cloudy",
+        "partly sunny",
+        "mostly sunny",
+        "mostly clear",
+        "mostly cloudy",
+        "sunny",
+        "clear"
+    )
+
+    low_probability = ("LOW", (
+        "slight chance rain showers",
+        "slight chance showers",
+        "slight chance thunderstorms",
+        "slight chance showers and thunderstorms"
+        "isolated showers",
+        "isolated showers and thunderstorms",
+
+    ))
+    medium_probability = ("MODERATE", (
+        "chance rain showers",
+        "chance showers",
+        "chance thunderstorms",
+        "scattered showers",
+    ))
+    high_probability = ("HIGH", (
+        "rain likely"
+        "showers likely",
+        "showers and thunderstorms likely",
+        "showers and thunderstorms",
+    ))
+
+    def __init__(self, period):
+        self.normalized_short_forecast = period["shortForecast"].lower().strip()
+        self.is_daytime = "/icons/land/day/" in period["icon"]
+
+    @property
+    def precipitation_probability(self):
+        for forecast in self.precipitation_not_expected:
+            if forecast == self.normalized_short_forecast:
+                return "NONE"
+        for (prob, fragments) in [self.low_probability, self.medium_probability, self.high_probability]:
+            for fragment in fragments:
+                if fragment in self.normalized_short_forecast:
+                    return prob
+        return "UNKNOWN"
+
+    @property
+    def icon_type(self):
+        if self.precipitation_probability in {"HIGH", "MODERATE"}:
+            if "thunderstorm" in self.normalized_short_forecast:
+                return "TSTORM"
+            else:
+                return "RAIN"
+        for descriptor in ("clear", "sunny", "mostly clear", "mostly sunny"):
+            if descriptor in self.normalized_short_forecast:
+                if self.is_daytime:
+                    return "SUN"
+                else:
+                    return "MOON"
+        return "CLOUD"
