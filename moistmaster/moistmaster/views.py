@@ -42,15 +42,14 @@ class Index(LoginOrPasswordSetRequired, TemplateView):
 
     def forecast_icon_and_label(self, forecast):
         if forecast.icon_type == "SUN":
-            return ("images/svg-icons/sun.svg", "Clear skies")
+            return "images/svg-icons/sun.svg", "Clear skies"
         if forecast.icon_type == "MOON":
-            return ("images/svg-icons/moon.svg", "Clear skies")
+            return "images/svg-icons/moon.svg", "Clear skies"
         if forecast.icon_type == "RAIN":
-            return ("images/svg-icons/rain.svg", "Rain")
+            return "images/svg-icons/rain.svg", "Rain"
         if forecast.icon_type == "TSTORM":
-            return ("images/svg-icons/thunderstorm.svg" "Stormy")
-        return ("images/svg-icons/cloud.svg", "Cloudy")
-
+            return "images/svg-icons/thunderstorm.svg", "Stormy"
+        return "images/svg-icons/cloud.svg", "Cloudy"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()

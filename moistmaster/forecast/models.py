@@ -19,6 +19,10 @@ class Forecast(models.Model):
 
     objects = ForecastQuerySet.as_manager()
 
+    class Meta:
+        db_table = "forecasts"
+        managed = False
+
     def __str__(self):
         return "Forecast {}".format(self.period_index)
 

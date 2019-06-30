@@ -52,10 +52,7 @@
       <!-- place project specific Javascript in this file -->
       <script src="{% static 'js/underscore.js' %}"></script>
       <script src="{% static 'js/tinycolor.js' %}"></script>
-      {% compress js %}
-      <script src="{% static 'js/project.js' %}"></script>
-      {% endcompress %}
-
+      {% compress js %}<script src="{% static 'js/project.js' %}"></script>{% endcompress %}
     {% endblock javascript %}
   </body>
 </html>

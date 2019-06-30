@@ -1,8 +1,10 @@
 from contextlib import contextmanager
 from datetime import datetime
-from functools import partial
+from functools import partial, wraps
 import logging
 import pytz
+import schedule
+
 try:
     import RPi.GPIO as GPIO
 except ImportError:  # If we're running in a non-raspberry pi env, import the GPIO emulator
@@ -101,3 +103,18 @@ def gpio_session(numbering_system=GPIO.BCM):
 
 def utc_now():
     return pytz.UTC.localize(datetime.utcnow())
+
+
+def catch_exceptions(cancel_on_failure=False):
+    def catch_exceptions_decorator(job_func):
+        @wraps(job_func)
+        def wrapper(*args, **kwargs):
+            try:
+                return job_func(*args, **kwargs)
+            except:
+                import traceback
+                print(traceback.format_exc())
+                if cancel_on_failure:
+                    return schedule.CancelJob
+        return wrapper
+    return catch_exceptions_decorator

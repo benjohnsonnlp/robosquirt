@@ -6,11 +6,8 @@ import math
 from sqlalchemy import VARCHAR, Column, Integer, DateTime, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
-from sqlalchemy.orm import scoped_session
 
 from robosquirt.utils import utc_now
-from robosquirt.database import session_factory
-
 
 Base = declarative_base()
 
@@ -47,20 +44,9 @@ class WateringSession(Base):
         return not bool(self.session_end)
 
     @classmethod
-    def delete_open_sessions(cls):
-        session = scoped_session(session_factory)
+    def delete_open_sessions(cls, session):
         removed_count = 0
         for watering_session in session.query(cls).filter(cls.session_end is None).all():
             session.delete(watering_session)
             removed_count += 1
         logging.info("Removed {} open sessions.".format(removed_count))
-
-
-
-def create_tables_if_needed():
-    """
-    Create the schema and tables if they aren't already there.
-    """
-    session = scoped_session(session_factory)
-    for model in (WateringSession,):
-        model.__table__.create(session.bind, checkfirst=True)

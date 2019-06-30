@@ -1,14 +1,17 @@
+import time
+from functools import partial
 import logging
 import pprint
+import schedule
 import signal
 import threading
 import voluptuous
 import zmq
 
-from robosquirt.analytics.models import create_tables_if_needed
+from robosquirt.forecast.models import Forecast
+from robosquirt.database import create_tables_if_needed, get_session
 from robosquirt.solenoid import Valve
-from robosquirt.utils import gpio_session
-
+from robosquirt.utils import gpio_session, catch_exceptions
 
 logger = logging.getLogger(__name__)
 
@@ -34,12 +37,14 @@ class Main:
             signal.signal(sig_type, self.os_signal_handler)
         self.should_stop = False
         self.server = Server(self.objects["valve"])
+        self.forecast_lookup = ForecastLookup()
 
     def cleanup(self):
         """
         Signal the ØMQ server thread to stop, make sure the valve is closed.
         """
         self.server.stop()
+        self.forecast_lookup.stop()
         self.objects["valve"].close()
 
     def os_signal_handler(self, signum, frame):
@@ -58,6 +63,7 @@ class Main:
     def run(self):
         try:
             self.server.start()
+            self.forecast_lookup.start()
             while not self.should_stop:
                 # FIXME: All the watering policy logic checks would go here.
                 pass
@@ -66,6 +72,36 @@ class Main:
             logger.error("An error occurred: {}".format(exc))
             self.cleanup()
             raise
+
+
+class ForecastLookup(threading.Thread):
+
+    def __init__(self):
+        super().__init__()
+        self._stop_event = threading.Event()
+
+    def run(self):
+        session = get_session()
+        self.refresh_forecast(session)
+        job = partial(self.refresh_forecast, session)
+        schedule.every(1).hours.do(job)
+        while not self._stop_event.is_set():
+            time.sleep(5)
+            schedule.run_pending()
+
+    def stop(self):
+        """
+        Calling this sets the stop event flag, which will tell the thread to exit.
+        """
+        logger.info("Stopping forecast lookup cron job...")
+        self._stop_event.set()
+
+    @staticmethod
+    def refresh_forecast(session):
+        try:
+            Forecast.reload_nws_forecasts(session)
+        except Exception as e:
+            logging.warning("Could not fetch forecasts from NWS endpoint: {}".format(e))
 
 
 class Server(threading.Thread):
@@ -143,6 +179,7 @@ class Server(threading.Thread):
 
 
 def main():
+    logging.getLogger("schedule").setLevel(logging.WARNING)
     create_tables_if_needed()
     with gpio_session():
         main_proc = Main(18)
