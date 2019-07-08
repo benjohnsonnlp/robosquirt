@@ -115,6 +115,7 @@ class SetPassword(FormView):
         except User.DoesNotExist:
             user = User.objects.create_user(settings.DEFAULT_USERNAME,
                                             '{}@example.com'.format(settings.DEFAULT_USERNAME))
+            UserSettings.objects.create(email='{}@example.com'.format(settings.DEFAULT_USERNAME))
         return user
 
 
