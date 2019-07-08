@@ -41,6 +41,8 @@ class Index(LoginOrPasswordSetRequired, TemplateView):
     template_name = "index.html"
 
     def forecast_icon_and_label(self, forecast):
+        if not forecast:
+            return "", "unknown"
         if forecast.icon_type == "SUN":
             return "images/svg-icons/sun.svg", "Clear skies"
         if forecast.icon_type == "MOON":
