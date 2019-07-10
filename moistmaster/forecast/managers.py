@@ -17,7 +17,6 @@ class ForecastQuerySet(models.QuerySet):
             return result[0]
         else:
             if retry > 0:
-                self.reload_nws_forecasts()
                 self.current_forecast(retry=retry - 1)
 
     def future_forecasts(self):
