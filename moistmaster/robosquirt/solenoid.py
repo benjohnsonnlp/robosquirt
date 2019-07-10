@@ -11,6 +11,9 @@ ON = 1
 OFF = 0
 
 
+logger = logging.getLogger("robosquirt")
+
+
 class Valve:
     """
     A class for controlling a solenoid valve.
@@ -49,7 +52,7 @@ class Valve:
         """
         if self.is_open:  # pragma: no cover
             # Trying to open a valve that is already open may indicate a bug:
-            logging.warning("Valve is already open.")
+            logger.warning("Valve is already open.")
             return
         with self.lock:
             if self.pin.current_state == ON:  # pragma: no cover
@@ -60,7 +63,7 @@ class Valve:
             self.pin.send_high()
             self.watering_session.start()
             self.is_open = True
-            logging.debug("Valve opened.")
+            logger.info("Valve opened.")
 
     def close(self):
         """
@@ -68,7 +71,7 @@ class Valve:
         """
         if not self.is_open:  # pragma: no cover
             # Trying to close a valve that is already open may indicate a bug:
-            logging.warning("Valve is already closed.")
+            logger.warning("Valve is already closed.")
             return
         with self.lock:
             if self.pin.current_state == OFF:  # pragma: no cover
@@ -79,7 +82,7 @@ class Valve:
             self.watering_session.end()
             del self.watering_session
             self.is_open = False
-            logging.debug("Valve closed.")
+            logger.info("Valve closed.")
 
     def toggle(self):
         """

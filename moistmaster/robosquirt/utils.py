@@ -1,12 +1,8 @@
-import os
 from contextlib import contextmanager
 from datetime import datetime
 from functools import partial
 import logging
 import pytz
-
-
-os.environ["OBJC_DISABLE_INITIALIZE_FORK_SAFETY"] = "YES"
 
 
 try:

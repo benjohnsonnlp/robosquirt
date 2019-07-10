@@ -13,7 +13,7 @@ from .solenoid import Valve
 from .utils import gpio_session
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("robosquirt")
 
 
 #: We will listen for these OS signals and shutdown the Robosquirt process gracefully when received.
@@ -85,8 +85,8 @@ class ForecastLookup(threading.Thread):
         self.refresh_forecast()
         schedule.every(1).hours.do(self.refresh_forecast)
         while not self._stop_event.is_set():
-            time.sleep(5)
             schedule.run_pending()
+            time.sleep(2)
 
     def stop(self):
         """

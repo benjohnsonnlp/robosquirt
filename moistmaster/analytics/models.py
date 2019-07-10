@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.timezone import now
 import math
 
+from moistmaster.utils import utc_now
 from .managers import WateringSessionQuerySet
 
 #: FIXME: This should not be a constant.
@@ -13,12 +14,12 @@ class WateringSession(models.Model):
     A DB representation of a watering session (i.e a period of time when a valve was turned on then off).
     """
     identifier = models.CharField(max_length=36, primary_key=True)
-    created_time = models.DateTimeField(null=False)
+    created_time = models.DateTimeField(null=False, default=utc_now)
     session_start = models.DateTimeField(null=False)
-    session_end = models.DateTimeField()
+    session_end = models.DateTimeField(null=True)
     device_identifier = models.IntegerField(null=False)
-    originator = models.TextField()
-    reason = models.TextField()
+    originator = models.TextField(blank=True)
+    reason = models.TextField(blank=True)
 
     objects = WateringSessionQuerySet.as_manager()
 
