@@ -346,3 +346,5 @@ moistmaster/moistmaster/media/
 
 
 .DS_Store
+
+staticfiles/
