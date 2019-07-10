@@ -1,7 +1,8 @@
 ########################################################
 #
 #  Minimal requirements to run
-#  Robosquirt & Moistmaster (+ emulator.txt/pi.txt)
+#  Robosquirt & Moistmaster
+#  (+ pi.txt if installing on a PI)
 #
 ########################################################
 
