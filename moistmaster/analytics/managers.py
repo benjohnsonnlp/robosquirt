@@ -1,14 +1,15 @@
 import logging
 from datetime import timedelta
-from itertools import groupby
-
 from django.db import models
 from django.db.models.functions import TruncDay
+from itertools import groupby
+
 
 from moistmaster.utils import utc_now
 
 
 class WateringSessionQuerySet(models.QuerySet):
+
     logger = logging.getLogger("moistmaster")
 
     def gallons_used(self, days=25):
@@ -31,3 +32,10 @@ class WateringSessionQuerySet(models.QuerySet):
             day = now - timedelta(days=delta_days)
             daily_totals.append((day, days_with_water.get(day, 0)))
         return daily_totals
+
+    def delete_open_sessions(self, session):
+        removed_count = 0
+        for watering_session in self.filter(session_end=None).all():
+            session.delete(watering_session)
+            removed_count += 1
+        logging.info("Removed {} open sessions.".format(removed_count))

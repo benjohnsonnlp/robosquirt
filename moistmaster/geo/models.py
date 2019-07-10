@@ -1,6 +1,6 @@
 from django.db import models
 
-from forecast.nws import Point
+from forecast.nws import PointEndpoint
 
 
 class GeographicFeature(models.Model):
@@ -44,7 +44,7 @@ class UserSettings(models.Model):
 
     def set_location(self, geographic_feature):
         self.location = geographic_feature
-        point = Point(geographic_feature.latitude, geographic_feature.longitude)
+        point = PointEndpoint(geographic_feature.latitude, geographic_feature.longitude)
         self.nws_daily_endpoint = point.forecast_url
         self.nws_hourly_endpoint = point.hourly_forecast_url
         self.save()

@@ -6,7 +6,7 @@ import requests
 
 
 class BaseEndpoint:
-    logger = logging.getLogger("moistmaster")
+    logger = logging.getLogger("robosquirt")
 
     headers = {
         'User-Agent': 'Moistmaster: Automated Watering Controller (v1.0)'
@@ -18,7 +18,7 @@ class BaseEndpoint:
         return response.json()
 
 
-class Point(BaseEndpoint):
+class PointEndpoint(BaseEndpoint):
     url = "https://api.weather.gov/points/{},{}"
 
     def __init__(self, latitude, longitude):
@@ -41,7 +41,7 @@ class Point(BaseEndpoint):
         return self.properties["forecastHourly"]
 
 
-class Forecast(BaseEndpoint):
+class ForecastEndpoint(BaseEndpoint):
 
     def __init__(self, url):
         self.logger.info("Querying National Weather Service forecast endpoint: {}".format(url))

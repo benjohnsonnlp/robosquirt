@@ -1,5 +1,4 @@
 import time
-from functools import partial
 import logging
 import pprint
 import schedule
@@ -8,12 +7,14 @@ import threading
 import voluptuous
 import zmq
 
-from robosquirt.forecast.models import Forecast
-from robosquirt.database import create_tables_if_needed, get_session
-from robosquirt.solenoid import Valve
-from robosquirt.utils import gpio_session
+from forecast.models import Forecast
+
+from .solenoid import Valve
+from .utils import gpio_session
+
 
 logger = logging.getLogger(__name__)
+
 
 #: We will listen for these OS signals and shutdown the Robosquirt process gracefully when received.
 INTERRUPT_SIGNAL_NAME_MAP = {
@@ -81,10 +82,8 @@ class ForecastLookup(threading.Thread):
         self._stop_event = threading.Event()
 
     def run(self):
-        session = get_session()
-        self.refresh_forecast(session)
-        job = partial(self.refresh_forecast, session)
-        schedule.every(1).hours.do(job)
+        self.refresh_forecast()
+        schedule.every(1).hours.do(self.refresh_forecast)
         while not self._stop_event.is_set():
             time.sleep(5)
             schedule.run_pending()
@@ -97,9 +96,9 @@ class ForecastLookup(threading.Thread):
         self._stop_event.set()
 
     @staticmethod
-    def refresh_forecast(session):
+    def refresh_forecast():
         try:
-            Forecast.reload_nws_forecasts(session)
+            Forecast.objects.reload_nws_forecasts()
         except Exception as e:
             logging.warning("Could not fetch forecasts from NWS endpoint: {}".format(e))
 

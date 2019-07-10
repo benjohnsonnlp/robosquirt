@@ -14,7 +14,7 @@ from zmq import ZMQError
 from analytics.models import WateringSession
 from forecast.models import Forecast
 from geo.models import UserSettings
-from moistmaster.robosquirt import RobosquirtClient
+from robosquirt.client import RobosquirtClient
 
 
 client = RobosquirtClient()

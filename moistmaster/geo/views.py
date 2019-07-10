@@ -4,7 +4,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import TemplateView
 
-from forecast.nws import Forecast
+from forecast.nws import ForecastEndpoint
 from geo.forms import LocationLookupForm
 from geo.load import GNISLoader
 from geo.models import GeographicFeature, UserSettings
@@ -48,7 +48,7 @@ class Location(TemplateView):
 
     def get_forecast(self, user_settings):
         if user_settings.nws_hourly_endpoint:
-            forecast = Forecast(user_settings.nws_hourly_endpoint)
+            forecast = ForecastEndpoint(user_settings.nws_hourly_endpoint)
             return forecast.periods
         else:
             return []

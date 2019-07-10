@@ -23,9 +23,7 @@ class WateringSession(models.Model):
     objects = WateringSessionQuerySet.as_manager()
 
     class Meta:
-        db_table = "watering_session"
         get_latest_by = ["created_time", ]
-        managed = False
 
     def __repr__(self):
         optional_end = "ongoing" if self.is_running else self.session_end.isoformat()
