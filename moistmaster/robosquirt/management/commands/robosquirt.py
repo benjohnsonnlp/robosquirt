@@ -13,4 +13,3 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.logger.info("Starting robosquirt server...")
         main()
-

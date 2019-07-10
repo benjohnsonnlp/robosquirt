@@ -48,5 +48,3 @@ class UserSettings(models.Model):
         self.nws_daily_endpoint = point.forecast_url
         self.nws_hourly_endpoint = point.hourly_forecast_url
         self.save()
-
-

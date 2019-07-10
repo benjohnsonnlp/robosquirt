@@ -34,4 +34,3 @@ class ValveTest(TestCase):
         self.assertFalse(test_valve.is_open)
 
         self.assertEqual(test_valve.real_status, "closed")
-

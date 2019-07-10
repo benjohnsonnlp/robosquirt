@@ -17,8 +17,11 @@ def sqlite_conn_path():
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-root = lambda *x: os.path.join(BASE_DIR, *x)
-app = lambda *x: os.path.join(BASE_DIR, 'moistmaster', *x)
+
+def root(*parts): os.path.join(BASE_DIR, *parts)
+
+
+def app(app_name): os.path.join(BASE_DIR, 'moistmaster', app_name)
 
 
 # GENERAL

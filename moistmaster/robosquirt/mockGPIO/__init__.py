@@ -37,5 +37,6 @@ def add_event_detect(channel, edge, **_):
 def event_detected(channel):
     logger.info("GPIO event detected: channel={}".format(channel))
 
+
 def remove_event_detect(channel):
     logger.info("GPIO remove event detect: channel={}".format(channel))

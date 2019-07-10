@@ -26,4 +26,3 @@ class Forecast(models.Model):
 
     def __repr__(self):
         return "<Forecast {}>".format(self.period_index)
-
