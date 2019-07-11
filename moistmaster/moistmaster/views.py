@@ -56,7 +56,7 @@ class Index(LoginOrPasswordSetRequired, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         status = client.get_status()
-        user_settings = UserSettings.objects.get()
+        user_settings = UserSettings.objects.get_or_create_default()
         forecast = Forecast.objects.current_forecast()
         forecast_icon, forecast_label = self.forecast_icon_and_label(forecast)
         if status:

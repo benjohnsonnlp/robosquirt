@@ -1,6 +1,7 @@
 from django.db import models
 
 from forecast.nws import PointEndpoint
+from geo.managers import UserSettingsQuerySet
 
 
 class GeographicFeature(models.Model):
@@ -41,6 +42,8 @@ class UserSettings(models.Model):
     email = models.EmailField(blank=True)
     nws_daily_endpoint = models.URLField(blank=True)
     nws_hourly_endpoint = models.URLField(blank=True)
+
+    objects = UserSettingsQuerySet.as_manager()
 
     def set_location(self, geographic_feature):
         self.location = geographic_feature
