@@ -1,0 +1,12 @@
+[Unit]
+Description=Robosquirt Server
+
+[Service]
+ExecStart=/var/envs/robosquirt/bin/python3 /var/apps/robosquirt/moistmaster/manage.py runserver 0.0.0.0:8080
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=moistmaster-server
+
+[Install]
+WantedBy=multi-user.target
+
