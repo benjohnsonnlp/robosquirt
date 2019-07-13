@@ -7,34 +7,6 @@
 {% endblock %}
 
 {%  block body %}
-
-
-<div class="pos-f-t">
-  <nav class="navbar navbar-dark bg-dark">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  </nav>
-  <div class="collapse" id="navbarToggleExternalContent">
-    <div class="bg-dark p-2">
-        <ul class="main-navigation">
-            <li>
-                <a class="btn btn-primary" href="{% url 'location' %}" role="button">Location &amp; Forecast</a>
-            </li>
-            <li>
-                <a class="btn btn-primary" href="{% url 'watering-sessions' %}" role="button">Watering Events</a>
-            </li>
-            <li>
-                <form action="{% url 'reset-password' %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">Reset your password</button>
-                </form>
-            </li>
-        </ul>
-    </div>
-  </div>
-
-</div>
 <section class="main">
     {% if valve_status == "unavailable" %}
     <div class="alert alert-danger" role="alert"><strong>ERROR:</strong> Cannot communicate with robosquirt server...</div>

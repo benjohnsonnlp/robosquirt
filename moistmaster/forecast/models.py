@@ -14,18 +14,15 @@ class Forecast(models.Model):
     forecast_short = models.TextField()
     forecast_long = models.TextField()
     precipitation_probability = models.TextField()
-    is_daytime = models.BooleanField()
     icon_type = models.TextField()
 
     objects = ForecastQuerySet.as_manager()
 
     class Meta:
-        db_table = "forecasts"
-        managed = False
+        get_latest_by = ["start", ]
 
     def __str__(self):
         return "Forecast {}".format(self.period_index)
 
     def __repr__(self):
         return "<Forecast {}>".format(self.period_index)
-

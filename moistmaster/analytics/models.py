@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.timezone import now
 import math
 
+from moistmaster.utils import utc_now
 from .managers import WateringSessionQuerySet
 
 #: FIXME: This should not be a constant.
@@ -13,19 +14,17 @@ class WateringSession(models.Model):
     A DB representation of a watering session (i.e a period of time when a valve was turned on then off).
     """
     identifier = models.CharField(max_length=36, primary_key=True)
-    created_time = models.DateTimeField(null=False)
+    created_time = models.DateTimeField(null=False, default=utc_now)
     session_start = models.DateTimeField(null=False)
-    session_end = models.DateTimeField()
+    session_end = models.DateTimeField(null=True)
     device_identifier = models.IntegerField(null=False)
-    originator = models.TextField()
-    reason = models.TextField()
+    originator = models.TextField(blank=True)
+    reason = models.TextField(blank=True)
 
     objects = WateringSessionQuerySet.as_manager()
 
     class Meta:
-        db_table = "watering_session"
         get_latest_by = ["created_time", ]
-        managed = False
 
     def __repr__(self):
         optional_end = "ongoing" if self.is_running else self.session_end.isoformat()
@@ -59,7 +58,8 @@ class WateringSession(models.Model):
         days, rem = divmod(seconds, 86400)
         hours, rem = divmod(rem, 3600)
         minutes, seconds = divmod(rem, 60)
-        if seconds < 1: seconds = 1
+        if seconds < 1:
+            seconds = 1
         locals_ = locals()
         magnitudes_str = ("{n} {magnitude}".format(n=int(locals_[magnitude]), magnitude=magnitude)
                           for magnitude in ("days", "hours", "minutes", "seconds") if locals_[magnitude])
