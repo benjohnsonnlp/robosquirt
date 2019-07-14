@@ -1,5 +1,0 @@
-[run]
-include =
-    robosquirt/*
-omit =
-    tests/*

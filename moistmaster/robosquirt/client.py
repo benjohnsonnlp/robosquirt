@@ -26,7 +26,7 @@ class RobosquirtClient:
         self.socket.connect('tcp://127.0.0.1:{port}'.format(port=self.port))
         self.poller = zmq.Poller()
         self.poller.register(self.socket, zmq.POLLIN)
-        logger.info("Connecting to Robosquirt server on port {}...".format(self.port))
+        logger.debug("Connecting to Robosquirt server on port {}...".format(self.port))
 
     def _teardown_connection(self):
         """

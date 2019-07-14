@@ -12,7 +12,10 @@ What the script does
 3. Adds Systemd service definition files for robosquirt and moistmaster
 4. Adds rsyslog configuration for both services. Their logs will show up in ``/var/log/robosquirt.log`` and ``/var/log/moistmaster.log``, respectively.
 
-The only thing you need to do now is create the database with ``./manage.pt migrate``.
+The only thing you need to do now is create the database and load necessary data with::
+
+    ./manage.pt migrate
+    ./manage.pt setup
 
 To run robosquirt::
 

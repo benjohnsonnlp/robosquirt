@@ -1,5 +1,5 @@
 [Unit]
-Description=Robosquirt Server
+Description=Moistmaster Django App
 
 [Service]
 ExecStart=/var/envs/robosquirt/bin/python3 /var/apps/robosquirt/moistmaster/manage.py runserver 0.0.0.0:8080

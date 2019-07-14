@@ -17,7 +17,7 @@ from geo.models import UserSettings
 from robosquirt.client import RobosquirtClient
 
 
-client = RobosquirtClient()
+
 
 
 class LoginOrPasswordSetRequired(LoginRequiredMixin):
@@ -39,6 +39,7 @@ class LoginOrPasswordSetRequired(LoginRequiredMixin):
 class Index(LoginOrPasswordSetRequired, TemplateView):
 
     template_name = "index.html"
+    client = RobosquirtClient()
 
     def forecast_icon_and_label(self, forecast):
         if not forecast:
@@ -55,7 +56,7 @@ class Index(LoginOrPasswordSetRequired, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        status = client.get_status()
+        status = self.client.get_status()
         user_settings = UserSettings.objects.get()
         forecast = Forecast.objects.current_forecast()
         forecast_icon, forecast_label = self.forecast_icon_and_label(forecast)
@@ -76,12 +77,13 @@ class Index(LoginOrPasswordSetRequired, TemplateView):
 
 class Toggle(LoginOrPasswordSetRequired, RedirectView):
 
+    client = RobosquirtClient()
     http_method_names = ['post']
     pattern_name = "index"
 
     def post(self, request, *args, **kwargs):
         try:
-            client.toggle()
+            self.client.toggle()
         except ZMQError:
             pass
         return super().post(request, *args, **kwargs)
