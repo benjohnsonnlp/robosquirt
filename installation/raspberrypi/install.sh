@@ -3,8 +3,10 @@
 set -e
 
 APPS_DIR="/var/apps"
+ENVS_DIR="/var/envs"
 GIT_REPO="https://github.com/benjohnsonnlp/robosquirt.git"
 APP_DIR="${APPS_DIR}/robosquirt"
+ENV_DIR="${ENVS_DIR}/robosquirt"
 ROBOSQUIRT_SERVICE_FILE="/lib/systemd/system/robosquirt.service"
 MOISTMASTER_SERVICE_FILE="/lib/systemd/system/moistmaster.service"
 SYSLOG_FILE="/etc/rsyslog.d/robosquirt.conf"
@@ -26,6 +28,17 @@ else
     echo "Apps directory (${APPS_DIR}) already exists. Skipping."
 fi
 
+# Create envs directory.
+if [ ! -d "$ENVS_DIR" ]; then
+  mkdir -p ENVS_DIR
+  chown pi:pi $ENVS_DIR
+  chmod 775 $ENVS_DIR
+  echo "Created virtual envs directory: ${ENVS_DIR}."
+else
+    echo "Virtual envs directory (${ENVS_DIR}) already exists. Skipping."
+fi
+
+
 # Clone project.
 if [ ! -d "$APP_DIR" ]; then
   git clone $GIT_REPO $APPS_DIR
@@ -33,6 +46,17 @@ if [ ! -d "$APP_DIR" ]; then
 
 else
     echo "Project already exists (${APP_DIR}). No need to clone from GitHub."
+    cd $APP_DIR && git pull
+fi
+
+# Make virtualenv and install requirements.
+if [ ! -d "$ENV_DIR" ]; then
+  virtualenv $ENV_DIR --python=`which python3`
+  source "${ENV_DIR}/bin/activate"
+  pip install -r "${APP_DIR}/requirements/dev.txt"
+  echo "Project requirements installed.."
+else
+    echo "Project virtualenv already exists (${ENV_DIR}). No need to install requirements."
 fi
 
 # Install systemd service: robosquirt.
@@ -70,5 +94,10 @@ if [ ! -f "$SYSLOG_FILE" ]; then
 else
     echo "Rsyslog already configured (${SYSLOG_FILE}). Skipping."
 fi
+
+
+
+
+
 
 echo "All done!"
