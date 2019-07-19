@@ -17,6 +17,8 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+apt-get --assume-yes install sqlite3
+
 
 # Create apps directory.
 if [ ! -d "$APPS_DIR" ]; then
