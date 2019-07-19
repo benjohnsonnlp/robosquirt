@@ -20,7 +20,7 @@ fi
 
 # Create apps directory.
 if [ ! -d "$APPS_DIR" ]; then
-  mkdir -p APPS_DIR
+  mkdir -p $APPS_DIR
   chown pi:pi $APPS_DIR
   chmod 775 $APPS_DIR
   echo "Created apps directory: ${APPS_DIR}."
@@ -30,7 +30,7 @@ fi
 
 # Create envs directory.
 if [ ! -d "$ENVS_DIR" ]; then
-  mkdir -p ENVS_DIR
+  mkdir -p $ENVS_DIR
   chown pi:pi $ENVS_DIR
   chmod 775 $ENVS_DIR
   echo "Created virtual envs directory: ${ENVS_DIR}."
@@ -41,7 +41,7 @@ fi
 
 # Clone project.
 if [ ! -d "$APP_DIR" ]; then
-  git clone $GIT_REPO $APPS_DIR
+  git clone $GIT_REPO $APP_DIR
   echo "Cloned project in: ${APP_DIR}."
 
 else
