@@ -26,8 +26,8 @@ class Command(BaseCommand):
 
     def load_location_data(self):
         self.logger.info("Loading location data. This may take a few minutes...")
-        sql_stream = subprocess.Popen(("gunzip", "--stdout", self.data_file), stdout=subprocess.PIPE)
-        subprocess.check_output(("sqlite3", self.sqlite_db), stdin=sql_stream.stdout)
+        sql_stream = subprocess.Popen(("gunzip", "--stdout", str(self.data_file)), stdout=subprocess.PIPE)
+        subprocess.check_output(("sqlite3", str(self.sqlite_db)), stdin=sql_stream.stdout)
         sql_stream.wait()
         self.logger.info("Locations loaded.")
 
