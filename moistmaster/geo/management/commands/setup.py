@@ -19,7 +19,7 @@ class Command(BaseCommand):
     def setup_user_stuff(self):
         try:
             User.objects.get()
-        except User.DoesNotExists:
+        except User.DoesNotExist:
             User.objects.create_user(settings.DEFAULT_USERNAME)
             logging.info("Created default user.")
         UserSettings.objects.get_or_create()

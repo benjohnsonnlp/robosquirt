@@ -59,6 +59,11 @@ else
     echo "Project virtualenv already exists (${ENV_DIR}). No need to install requirements."
 fi
 
+# The pi user should own everything.
+chown -R pi:pi $APP_DIR
+chown -R pi:pi $ENV_DIR
+
+
 # Install systemd service: robosquirt.
 if [ ! -f "$ROBOSQUIRT_SERVICE_FILE" ]; then
   cp robosquirt.service $ROBOSQUIRT_SERVICE_FILE
