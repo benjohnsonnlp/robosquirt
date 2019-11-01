@@ -19,7 +19,7 @@ zmq==0.0.0
 
 # Django
 # ------------------------------------------------------------------------------
-django==2.0.6
+django==2.0.12
 django-compressor==2.2
 django-crispy-forms==1.7.2
 django-debug-toolbar==1.9.1
